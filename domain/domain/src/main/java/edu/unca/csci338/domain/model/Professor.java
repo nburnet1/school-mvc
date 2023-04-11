@@ -2,33 +2,31 @@ package edu.unca.csci338.domain.model;
 
 import edu.unca.csci338.domain.data.*;
 
-public class Professor extends Person{
-	
-	private int iD;
-	private String firstName;
-	private String lastName;
-	private int department;
-	private boolean head;
-	
+public class Professor extends Person {
 
-	public Professor(int iD, String firstName, String lastName, int department, String status, boolean head) {
-		super(iD, firstName, lastName);
-		this.department = department;
-		this.head = head;
+    private int iD;
+    private String firstName;
+    private String lastName;
+    private int department;
+    private boolean head;
 
 
-
-	}
-	public Professor(int id, String firstName, String lastName, int department2) {
-		super(id, firstName, lastName);
-		this.department = department2;
-	}
-
-	public Professor() {
-		super();
-	}
+    public Professor(int iD, String firstName, String lastName, int department, String status, boolean head) {
+        super(iD, firstName, lastName);
+        this.department = department;
+        this.head = head;
 
 
+    }
+
+    public Professor(int id, String firstName, String lastName, int department2) {
+        super(id, firstName, lastName);
+        this.department = department2;
+    }
+
+    public Professor() {
+        super();
+    }
 //	public String getFirstName() {
 //		return firstName;
 //	}
@@ -49,39 +47,39 @@ public class Professor extends Person{
 //	}
 
 
-	public int getDepartment() {
-		return department;
-	}
+    public int getDepartment() {
+        return department;
+    }
 
 
-	public void setDepartment(int department) {
-		this.department = department;
-	}
-	
-	public String toString() {
-		return firstName + " " + lastName;
-	}
-	
+    public void setDepartment(int department) {
+        this.department = department;
+    }
 
-	public boolean equals(Professor professor) {
-		if(this.iD == professor.getID()) {
-			return true;
-		}
-		return false;
-	}
-	
-	public boolean getHead() {
-		return head;
-	}
-	
-	public void setHead(boolean head) {
-		this.head = head;
-	}
-	public void onProfessorDataChanged(Student student) {
-		// TODO Auto-generated method stub
-		
-	}
-	
+    public String toString() {
+        return firstName + " " + lastName;
+    }
+
+
+    public boolean equals(Professor professor) {
+        if (this.iD == professor.getID()) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean getHead() {
+        return head;
+    }
+
+    public void setHead(boolean head) {
+        this.head = head;
+    }
+
+    public void onProfessorDataChanged(Student student) {
+        // TODO Auto-generated method stub
+    }
+
 
 }
 

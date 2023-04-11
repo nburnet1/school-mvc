@@ -7,8 +7,7 @@ public class Room {
     private int roomNum;
     private int capacity;
     //private RoomType roomType;
-
-   // private Schedule schedule;
+    // private Schedule schedule;
 
     public int getRoomNum() {
         return roomNum;
@@ -30,9 +29,9 @@ public class Room {
         return id != NOT_SAVED_TO_DATABASE_ID;
     }
 
-	/*
-	 * public RoomType getRoomType() { return roomType; }
-	 */
+    /*
+     * public RoomType getRoomType() { return roomType; }
+     */
 
     public void setCapacity(int capacity) {
         this.capacity = capacity;
@@ -42,9 +41,9 @@ public class Room {
         this.roomNum = roomNum;
     }
 
-	/*
-	 * public void setRoomType(RoomType roomType) { this.roomType = roomType; }
-	 */
+    /*
+     * public void setRoomType(RoomType roomType) { this.roomType = roomType; }
+     */
 
     public Room(int roomNum, int capacity) { //, RoomType roomType) {
         this.id = NOT_SAVED_TO_DATABASE_ID;
@@ -65,17 +64,17 @@ public class Room {
         return String.format("Room(id=%d, roomNum=%d, capacity=%d, roomType=%s)", id, roomNum, capacity);//, roomType);
     }
 
-	/*
-	 * public static void main(String[] args) { RoomData roomData = new RoomData();
-	 * roomData.Connect(RoomData.CSCI_DATABASE);
-	 * 
-	 * int duplicateRoomNumber = 9999; Room roomA = new Room(duplicateRoomNumber,
-	 * 20, RoomType.ArtFacility); Room roomB = new Room(duplicateRoomNumber, 25,
-	 * RoomType.Classroom);
-	 * 
-	 * try {
-	 * 
-	 * roomData.addRoom(roomA); roomData.addRoom(roomB); } catch (Exception e) {
-	 * e.printStackTrace(); } }
-	 */
+    /*
+     * public static void main(String[] args) { RoomData roomData = new RoomData();
+     * roomData.Connect(RoomData.CSCI_DATABASE);
+     *
+     * int duplicateRoomNumber = 9999; Room roomA = new Room(duplicateRoomNumber,
+     * 20, RoomType.ArtFacility); Room roomB = new Room(duplicateRoomNumber, 25,
+     * RoomType.Classroom);
+     *
+     * try {
+     *
+     * roomData.addRoom(roomA); roomData.addRoom(roomB); } catch (Exception e) {
+     * e.printStackTrace(); } }
+     */
 }

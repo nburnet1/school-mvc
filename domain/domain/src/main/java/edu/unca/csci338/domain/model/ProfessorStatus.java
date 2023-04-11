@@ -3,7 +3,7 @@ package edu.unca.csci338.domain.model;
 
 public enum ProfessorStatus {
 
-	Teaching("teaching"),
+    Teaching("teaching"),
     Sabaatical("sabaatical"),
     NoLongerTeaching("no longer teaching");
 
@@ -11,10 +11,10 @@ public enum ProfessorStatus {
     private final String value;
 
     ProfessorStatus(String status) {
-		// TODO Auto-generated constructor stub
-    	value = status;
-	}
-  
+        // TODO Auto-generated constructor stub
+        value = status;
+    }
+
     public String toString() {
         switch (this) {
             case Teaching:
@@ -24,7 +24,7 @@ public enum ProfessorStatus {
             case NoLongerTeaching:
                 return "no longer teaching";
         }
-		return "error";
+        return "error";
     }
 
     public static ProfessorStatus fromString(String name) {
@@ -36,7 +36,7 @@ public enum ProfessorStatus {
             case "no longer teaching":
                 return ProfessorStatus.NoLongerTeaching;
         }
-		return null;
+        return null;
     }
 }
 
