@@ -8,14 +8,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.unca.csci338.domain.model.IStudentDataChangedEvent;
+import edu.unca.csci338.domain.model.IDataChangeEvent;
 import edu.unca.csci338.domain.model.Student;
 
 public class StudentData {
 	private Connection conn = null;
 	public boolean connected=false;
 	
-	private static List<IStudentDataChangedEvent> studentChangedEvents=new ArrayList<IStudentDataChangedEvent>();
+	private static List<IDataChangeEvent<Student>> studentChangedEvents = new ArrayList<IDataChangeEvent<Student>>();
 
 	public void Connect(String dbToConnectTo, String username, String pass) {
         // auto close connection
@@ -172,34 +172,6 @@ public class StudentData {
             return student;
 	}
 	
-//	public void insertStudent(Student stud) {
-//		PreparedStatement prep=null;
-//		ResultSet res=null;
-//		int studId;
-//		
-//		try {
-//			prep=conn.prepareStatement("insert into students(id, first_name, last_name, hours_completed, hours_current, hours_needed, status, year) VALUES( ?,?,?,?,?,?,?,? )");
-//			prep.setInt(1, stud.getID());
-//			prep.setString(2, stud.getFirstName());
-//			prep.setString(3, stud.getLastName());
-//			prep.setInt(4, stud.getHoursCompleted());
-//			prep.setInt(5, stud.getHoursCurrent());
-//			prep.setInt(6, stud.getHoursNeeded());
-//			prep.setString(7, stud.getStatus());
-//			prep.setInt(8, stud.getYearLevel());
-//			prep.executeUpdate();
-//			
-//			//studId=prep.executeUpdate();
-//			
-//			
-//			//stud.setID(studId);
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//	}
-	
 	public void updateStudent(Student stud) {
 		PreparedStatement prep=null;
 		
@@ -215,8 +187,8 @@ public class StudentData {
 			prep.setInt(8, stud.getID());
 			prep.executeUpdate();
 			
-			for(IStudentDataChangedEvent listener : studentChangedEvents) {
-				listener.onStudentDataChanged(stud);
+			for(IDataChangeEvent<Student> listener : studentChangedEvents) {
+				listener.onDataChanged(stud);
 			}
 			
 		} catch (SQLException e) {
@@ -225,31 +197,7 @@ public class StudentData {
 		}
 		
 	}
-	
-//	public void updateStudent(Student stud) {
-//		PreparedStatement prep=null;
-//		
-//		try {
-//			prep = conn.prepareStatement("UPDATE students SET id = ?, first_name = ?, last_name = ?, hours_completed = ?, hours_current = ?, hours_needed = ?, status = ?, year = ? WHERE id = ?");
-//			prep.setInt(1, stud.getID());
-//			prep.setString(2, stud.getFirstName());
-//			prep.setString(3, stud.getLastName());
-//			prep.setInt(4, stud.getHoursCompleted());
-//			prep.setInt(5, stud.getHoursCurrent());
-//			prep.setInt(6, stud.getHoursNeeded());
-//			prep.setString(7, stud.getStatus());
-//			prep.setInt(8, stud.getYearLevel());
-//			prep.setInt(9, stud.getID());
-//			prep.executeUpdate();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		
-//	}
-	
-	
-	
+
 	public void deleteStudent(int ID) {
 		PreparedStatement preparedStatement = null;
 
@@ -276,7 +224,7 @@ public class StudentData {
 		return connected;
 	}
 	
-	public static void AddOnStudentDataChangeEventListner(IStudentDataChangedEvent listener) {
+	public static void AddOnStudentDataChangeEventListener(IDataChangeEvent<Student> listener) {
 		studentChangedEvents.add(listener);
 	}
 	

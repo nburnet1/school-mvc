@@ -2,26 +2,25 @@ package edu.unca.csci338.domain.model;
 
 import edu.unca.csci338.domain.data.*;
 
-public class Professor extends Person implements IStudentDataChangedEvent{
+public class Professor extends Person{
 	
 	private int iD;
 	private String firstName;
 	private String lastName;
 	private int department;
 	private boolean head;
-	 
-	private ProfessorStatus profStatus;
 	
 
 	public Professor(int iD, String firstName, String lastName, int department, String status, boolean head) {
 		super(iD, firstName, lastName);
 		this.department = department;
-		this.profStatus = ProfessorStatus.fromString(status);
 		this.head = head;
-		StudentData.AddOnStudentDataChangeEventListner(this);
+
+
+
 	}
-	public Professor( String firstName, String lastName, int department2) {
-		super(firstName, lastName);
+	public Professor(int id, String firstName, String lastName, int department2) {
+		super(id, firstName, lastName);
 		this.department = department2;
 	}
 
@@ -63,10 +62,7 @@ public class Professor extends Person implements IStudentDataChangedEvent{
 		return firstName + " " + lastName;
 	}
 	
-	public String getStatus() {
-		return profStatus.toString();
-	}
-	
+
 	public boolean equals(Professor professor) {
 		if(this.iD == professor.getID()) {
 			return true;
@@ -81,8 +77,7 @@ public class Professor extends Person implements IStudentDataChangedEvent{
 	public void setHead(boolean head) {
 		this.head = head;
 	}
-	@Override
-	public void onStudentDataChanged(Student student) {
+	public void onProfessorDataChanged(Student student) {
 		// TODO Auto-generated method stub
 		
 	}

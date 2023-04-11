@@ -1,7 +1,6 @@
 package edu.unca.csci338.controllers;
 
 import edu.unca.csci338.domain.model.Student;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,10 +38,24 @@ public class StudentController {
 	}
 
 	@PostMapping("/student/")
-	public ResponseEntity updateStudent(
+	public ResponseEntity<HttpStatus> updateStudent(
 			@RequestBody(required = true) Student student
 	) {
 		sd.updateStudent(student);
+		return ResponseEntity.ok(HttpStatus.OK);
+	}
+	@PutMapping("/student/")
+	public ResponseEntity<HttpStatus> addStudent(
+			@RequestBody(required = true) Student student
+	) {
+		sd.insertStudent(student);;
+		return ResponseEntity.ok(HttpStatus.OK);
+	}
+	@DeleteMapping("/student/{id}")
+	public ResponseEntity<HttpStatus> deleteStudent(
+			@PathVariable int id
+	) {
+		sd.deleteStudent(id);
 		return ResponseEntity.ok(HttpStatus.OK);
 	}
 }
