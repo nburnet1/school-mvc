@@ -1,6 +1,6 @@
 package edu.unca.csci338.domain.model;
 
-import java.util.HashMap;
+
 
 public class Building {
 
@@ -26,18 +26,16 @@ public class Building {
         this.numRooms = numRooms;
     }
 
-    public void addRoom(HashMap room) {
-    }
-
-    public void removeRoom() {
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public void setId(int id) {
+    	this.id = id;
     }
 
 }

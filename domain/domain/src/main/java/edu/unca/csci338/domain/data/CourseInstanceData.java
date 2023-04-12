@@ -1,15 +1,12 @@
 package edu.unca.csci338.domain.data;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Random;
 
-import edu.unca.csci338.domain.model.*;
+import edu.unca.csci338.domain.model.CourseInstance;
+import edu.unca.csci338.domain.model.IDataChangeEvent;
+
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class CourseInstanceData {
@@ -17,11 +14,18 @@ public class CourseInstanceData {
 
     private Connection conn = null;
 
+    private static List<IDataChangeEvent<CourseInstance>> courseInstanceChangedEvents = new ArrayList<IDataChangeEvent<CourseInstance>>();
 
-    public void Connect(String dbToConnectTo) {
+    public CourseInstanceData(){
+
+    }
+
+
+    public void Connect(String dbToConnectTo, String username, String pass) {
         // auto close connection
-        try {
-            conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/" + dbToConnectTo, "root", "Treacles!1"); //
+        try
+        {
+            conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/" + dbToConnectTo, username, pass); //
             if (conn != null) {
                 System.out.println("Connected to the database!");
             } else {
@@ -32,6 +36,7 @@ public class CourseInstanceData {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
+
         }
     }
 
@@ -40,7 +45,7 @@ public class CourseInstanceData {
         PreparedStatement profPS = null;
         ResultSet resultSet = null;
         ResultSet profRS = null;
-        CourseInstance Course = null;
+        CourseInstance Course = new CourseInstance();
         try {
             preparedStatement = conn.prepareStatement("Select * from course_instances Where id =" + String.valueOf(ID));
             resultSet = preparedStatement.executeQuery();
@@ -51,90 +56,116 @@ public class CourseInstanceData {
         }
         try {
             while (resultSet.next()) {
-                //Course = new CourseInstance(c,  t,  s, p);
-                CourseInstance course = new CourseInstance();
-                Professor prof = new Professor();
-                course.setID(resultSet.getInt("id"));
-                course.setStartTime(resultSet.getDate("start_time"));
-                course.setEndTime(resultSet.getDate("end_time"));
-                int professor_id = resultSet.getInt("professor_id");
-                profPS = conn.prepareStatement("Select * from professor Where id =" + String.valueOf(professor_id));
-                profRS = preparedStatement.executeQuery();
-                prof.setFirstName(profRS.getString("first_name"));
-                course.setProf(prof);
-
-
+                Course.setId(resultSet.getInt("id"));
+                Course.setRoomId(resultSet.getInt("room_id"));
+                Course.setTypeId(resultSet.getInt("type_id"));
+                Course.setProfessorId(resultSet.getInt("professor_id"));
+                ;
             }
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
-        } finally {
         }
         return Course;
 
     }
 
-    public int deleteCourseInstance(int ID) {
+    public ArrayList<CourseInstance> getCourseInstances(){
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        CourseInstance courseInstance = new CourseInstance();
+        ArrayList<CourseInstance> result = new ArrayList<CourseInstance>();
+
+        try {
+            preparedStatement = conn.prepareStatement("select * from course_instances");
+            resultSet = preparedStatement.executeQuery();
+        } catch (SQLException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+
+        try {
+            while (resultSet.next()) {
+                int id = resultSet.getInt("id");
+                int typeId = resultSet.getInt("type_id");
+                int professorId = resultSet.getInt("professor_id");
+                int roomId = resultSet.getInt("room_id");
+
+                courseInstance = new CourseInstance(id, typeId, professorId, roomId);
+
+                result.add(courseInstance);
+            }
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public void deleteCourseInstance(int ID) {
         PreparedStatement preparedStatement = null;
         try {
+            preparedStatement = conn.prepareStatement("set foreign_key_checks = off");
             preparedStatement = conn.prepareStatement("DELETE FROM course_instances WHERE id =" + String.valueOf(ID));
+            preparedStatement = conn.prepareStatement("set foreign_key_checks = on");
             preparedStatement.executeQuery();
         } catch (SQLException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
         try {
-            int rowsDeleted = preparedStatement.executeUpdate();
-            if (rowsDeleted > 0) {
-                return 1;
-            } else {
-                System.out.println("A user was deleted successfully!");
-                return 0;
-            }
-
+            preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        return 0;
 
     }
 
-    public int createCourseInstance(Course icourse, int iprofessor, Room iroom) {
+    public void createCourseInstance(CourseInstance course) {
         PreparedStatement preparedStatement = null;
-        Random rand = new Random();
-        int int_random = rand.nextInt(999999);
-        CourseInstance t = getCourseInstance(int_random);
-        if (t == null) {
-            createCourseInstance(icourse, iprofessor, iroom);
-        }
         try {
-            String sql = "INSERT INTO course_instances (id , type_id , professor_id , room_id) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO course_instances (type_id , professor_id , room_id) VALUES (?, ?, ?)";
             PreparedStatement statement = conn.prepareStatement(sql);
-            statement.setInt(1, int_random);
-            statement.setInt(2, icourse.getId());
-            statement.setInt(3, iprofessor);
-            statement.setInt(4, iroom.getId());
-            int rowsInserted = statement.executeUpdate();
-            if (rowsInserted > 0) {
-                System.out.println("A new user was inserted successfully!");
-            }
+            statement.setInt(1, course.getTypeId());
+            statement.setInt(2, course.getProfessorId());
+            statement.setInt(3, course.getRoomId());
+            int id = statement.executeUpdate();
+            course.setId(id);
 
         } catch (SQLException e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-        return 1;
 
+    }
 
+    public void updateCourseInstance(CourseInstance courseInstance) {
+        PreparedStatement prep = null;
+
+        try {
+            prep = conn.prepareStatement("UPDATE course_instances SET type_id = ?, professor_id = ?, room_id = ? WHERE id = ?");
+            prep.setInt(1, courseInstance.getTypeId());
+            prep.setInt(2, courseInstance.getProfessorId());
+            prep.setInt(3, courseInstance.getRoomId());
+            prep.setInt(4, courseInstance.getId());
+            prep.executeUpdate();
+            for (IDataChangeEvent<CourseInstance> listener : courseInstanceChangedEvents) {
+                listener.onDataChanged(courseInstance);
+            }
+
+        } catch (SQLException e) {
+
+            e.printStackTrace();
+        }
     }
 
 }
 
-		
-		
-	
+
+
+
 
 
 

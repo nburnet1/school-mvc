@@ -1,7 +1,8 @@
 package edu.unca.csci338.domain.model;
 
+import edu.unca.csci338.domain.data.CourseData;
 
-public class Course {
+public class Course{
 
     private String nameOfCourse;
     private int courseReferenceNumber;
@@ -9,20 +10,24 @@ public class Course {
     private int departmentId;
     private int id;
 
+    public Course() {
+        //default constructor
+    }
 
     public Course(String nameOfCourse, int courseReferenceNumber, String description, int departmentId, int id) {
         this.nameOfCourse = nameOfCourse;
         this.courseReferenceNumber = courseReferenceNumber;
-        this.description = description;
-        this.departmentId = departmentId;
+        this.description=description;
+        this.departmentId=departmentId;
         this.setId(id);
+
     }
 
     public Course(String nameOfCourse, int courseReferenceNumber, String description, int departmentId) {
         this.nameOfCourse = nameOfCourse;
         this.courseReferenceNumber = courseReferenceNumber;
-        this.description = description;
-        this.departmentId = departmentId;
+        this.description=description;
+        this.departmentId=departmentId;
     }
 
     public int getDepartment() {
@@ -65,11 +70,9 @@ public class Course {
         this.id = id;
     }
 
+    public void onCourseDataChanged(Course course) {
+        // TODO Auto-generated method stub
+
+    }
 
 }
-	
-	
-	
-	
-	
-

@@ -17,7 +17,6 @@ public class BuildingController {
 
     public BuildingController() {
         bd.Connect("edu_unca_csci338", "root", "password123");
-
     }
 
     @GetMapping("/buildings/")
@@ -30,4 +29,19 @@ public class BuildingController {
         return ResponseEntity.ok(bd.getBuilding(id));
     }
 
+    @PostMapping("/building/")
+    public ResponseEntity<Building> updateBuilding(@RequestBody Building building) {
+        bd.updateBuilding(building);
+        return ResponseEntity.ok(building);
+    }
+    @PutMapping("/building/")
+    public ResponseEntity<Building> addBuilding(@RequestBody Building building) {
+        bd.addBuilding(building);
+        return ResponseEntity.ok(building);
+    }
+    @DeleteMapping("/building/{id}")
+    public ResponseEntity<HttpStatus> deleteBuilding(@PathVariable int id) {
+        bd.deleteBuilding(id);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 }

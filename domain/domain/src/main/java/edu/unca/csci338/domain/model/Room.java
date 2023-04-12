@@ -1,13 +1,27 @@
 package edu.unca.csci338.domain.model;
 
-public class Room {
-    private static final int NOT_SAVED_TO_DATABASE_ID = -1;
+import edu.unca.csci338.domain.data.RoomData;
+
+public class Room{
 
     private int id;
     private int roomNum;
     private int capacity;
-    //private RoomType roomType;
-    // private Schedule schedule;
+    private String roomType;
+    private int buildingId;
+
+    public Room() {
+        //default contructor
+    }
+
+    public Room(int id, int buildingId, int roomNum, int capacity, String roomType) {
+        this.id = id;
+        this.setBuildingId(buildingId);
+        this.roomNum = roomNum;
+        this.capacity = capacity;
+        this.roomType = roomType;
+
+    }
 
     public int getRoomNum() {
         return roomNum;
@@ -25,14 +39,6 @@ public class Room {
         this.id = id;
     }
 
-    public boolean isSavedToDatabase() {
-        return id != NOT_SAVED_TO_DATABASE_ID;
-    }
-
-    /*
-     * public RoomType getRoomType() { return roomType; }
-     */
-
     public void setCapacity(int capacity) {
         this.capacity = capacity;
     }
@@ -41,40 +47,25 @@ public class Room {
         this.roomNum = roomNum;
     }
 
-    /*
-     * public void setRoomType(RoomType roomType) { this.roomType = roomType; }
-     */
-
-    public Room(int roomNum, int capacity) { //, RoomType roomType) {
-        this.id = NOT_SAVED_TO_DATABASE_ID;
-        this.roomNum = roomNum;
-        this.capacity = capacity;
-        //this.roomType = roomType;
-
-        /*
-         * TODO: Add logic to check for duplicate roomNum for a building
-         * - Will need a way to reference a building to query it (not a stroke
-         * reference)
-         * - Might be good to make and throw a RoomWithDuplicateNumberException
-         */
+    public String getRoomType() {
+        return roomType;
     }
 
-    @Override
-    public String toString() {
-        return String.format("Room(id=%d, roomNum=%d, capacity=%d, roomType=%s)", id, roomNum, capacity);//, roomType);
+    public void setRoomType(String roomType) {
+        this.roomType = roomType;
     }
 
-    /*
-     * public static void main(String[] args) { RoomData roomData = new RoomData();
-     * roomData.Connect(RoomData.CSCI_DATABASE);
-     *
-     * int duplicateRoomNumber = 9999; Room roomA = new Room(duplicateRoomNumber,
-     * 20, RoomType.ArtFacility); Room roomB = new Room(duplicateRoomNumber, 25,
-     * RoomType.Classroom);
-     *
-     * try {
-     *
-     * roomData.addRoom(roomA); roomData.addRoom(roomB); } catch (Exception e) {
-     * e.printStackTrace(); } }
-     */
+    public void onRoomDataChanged(Room room) {
+        // TODO Auto-generated method stub
+
+    }
+
+    public int getBuildingId() {
+        return buildingId;
+    }
+
+    public void setBuildingId(int buildingId) {
+        this.buildingId = buildingId;
+    }
+
 }

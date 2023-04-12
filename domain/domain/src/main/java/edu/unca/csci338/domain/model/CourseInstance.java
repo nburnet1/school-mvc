@@ -5,81 +5,53 @@ import java.util.Date;
 
 public class CourseInstance {
 
-    int id;
-    Date startTime = null;
-    Date endTime = null;
-    ArrayList<Student> students = new ArrayList<Student>();
-    Course currentCourse;
-    Professor prof;
+    private int id;
+    private int typeId;
+    private int professorId;
+    private int roomId;
 
 
-    public Course getCurrentCourse() {
-        return currentCourse;
+    public CourseInstance(int id, int typeId, int professorId, int roomId) {
+        this.id = id;
+        this.typeId = typeId;
+        this.professorId = professorId;
+        this.roomId = roomId;
     }
 
+    public CourseInstance(){
 
-    public void setCurrentCourse(Course currentCourse) {
-        this.currentCourse = currentCourse;
     }
 
-
-    public Professor getProf() {
-        return prof;
-    }
-
-
-    public void setProf(Professor prof) {
-        this.prof = prof;
-    }
-
-    public int getID() {
+    public int getId() {
         return id;
     }
 
-    public void setID(int id) {
+    public int getProfessorId() {
+        return professorId;
+    }
+
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public int getTypeId() {
+        return typeId;
+    }
+
+    public void setId(int id) {
         this.id = id;
     }
 
-    public CourseInstance() {
+    public void setProfessorId(int professorId) {
+        this.professorId = professorId;
     }
-
-    public CourseInstance(Course currentCourse, Date startTime, Date endTime,
-                          ArrayList<Student> students, Professor prof) {
-        this.currentCourse = currentCourse;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.students = students;
-        this.prof = prof;
-
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
     }
-
-
-    public Date getStartTime() {
-        return this.startTime;
+    public void setTypeId(int typeId) {
+        this.typeId = typeId;
     }
-
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getEndTime() {
-        return this.endTime;
-    }
-
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
-
-    public ArrayList<Student> getStudents() {
-        return students;
-    }
-
-
-    public void setStudents(ArrayList<Student> students) {
-        this.students = students;
-    }
-
 }
+
+
 

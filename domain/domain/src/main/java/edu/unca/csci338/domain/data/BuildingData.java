@@ -1,6 +1,8 @@
 package edu.unca.csci338.domain.data;
 
 import edu.unca.csci338.domain.model.Building;
+import edu.unca.csci338.domain.model.IDataChangeEvent;
+import edu.unca.csci338.domain.model.Student;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -8,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class BuildingData {
@@ -19,6 +22,8 @@ public class BuildingData {
      */
 
     private Connection conn = null;
+
+    private static List<IDataChangeEvent<Building>> buildingChangedEvents = new ArrayList<IDataChangeEvent<Building>>();
 
 
     public void Connect(String dbToConnectTo, String username, String pass) {
@@ -144,22 +149,23 @@ public class BuildingData {
      */
 
     public void addBuilding(Building building) {
-        //addBuilding() variables
-        PreparedStatement preparedStatement = null;
-        //getting the data prepared to make the request, sending the request, and executing the request
+        PreparedStatement prep = null;
+        ResultSet res = null;
+        int buildID;
         try {
-            //getting the data prepared to make the request
-            int numRooms = building.getNumRooms();
-            String name = building.getName();
-            //sending the request
-            preparedStatement = conn.prepareStatement("insert into buildings ('num_Rooms', 'name') values(" + numRooms + "," + name + ")");
-            //executing the request
-            preparedStatement.executeUpdate();
+            prep = conn.prepareStatement("insert into buildings(num_rooms, name) VALUES( ?,?)");
+            prep.setInt(1, building.getNumRooms());
+            prep.setString(2, building.getName());
+            buildID = prep.executeUpdate();
+            building.setId(buildID);
 
         } catch (SQLException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
+        }
 
-        }//end try/catch
+//            preparedStatement = conn.prepareStatement("insert into buildings ('num_Rooms', 'name') values(" + numRooms + "," + name + ")");
+
 
     }//end addBuilding()
 
@@ -173,23 +179,26 @@ public class BuildingData {
      */
 
     public void updateBuilding(Building building) {
-        //updateBuilding() variables
-        PreparedStatement preparedStatement = null;
-        int ID = building.getId();
-        int numRooms = building.getNumRooms();
-        String name = building.getName();
-        //sending out a request for the database and executing the request
+        PreparedStatement prep=null;
+
         try {
-            preparedStatement = conn.prepareStatement("update buildings where id = " + ID + "('num_Rooms', 'name') values(" + numRooms + "," + name + ")");
-            preparedStatement.executeUpdate();
+            prep = conn.prepareStatement("UPDATE buildings SET name = ?, num_rooms = ? WHERE id = ?");
+            prep.setString(1, building.getName());
+            prep.setInt(2, building.getNumRooms());
+            prep.setInt(3, building.getId());
+            prep.executeUpdate();
+
+            for (IDataChangeEvent<Building> listener : buildingChangedEvents) {
+                listener.onDataChanged(building);
+            }
+
 
         } catch (SQLException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
+        }
 
-        }//end try/catch
-
-    }//end updateBuilding()
-
+    }
 
     /**
      * deletes the id and all other data associated with that id from the building database table
