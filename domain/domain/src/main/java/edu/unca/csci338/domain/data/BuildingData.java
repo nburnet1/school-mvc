@@ -33,7 +33,7 @@ public class BuildingData extends Data {
     public Building getBuilding(int ID) {
         //getBuilding() Variables
         PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+        ResultSet resultSet = getById("buildings", ID);
         Building building = null;
         //sending out the request to the database and receiving an answer
         try {
@@ -75,19 +75,10 @@ public class BuildingData extends Data {
 
     public ArrayList<Building> getBuildings() {
         //getBuildings() variables
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+        ResultSet resultSet = getAll("buildings");
         Building building = null;
         ArrayList<Building> results = new ArrayList<>();
         //sending out the request to the database for all table contents and receiving an answer
-        try {
-            preparedStatement = conn.prepareStatement("Select * from buildings");
-            resultSet = preparedStatement.executeQuery();
-
-        } catch (SQLException e1) {
-            e1.printStackTrace();
-
-        }//end try/catch
         try {
             while (resultSet.next()) {//cycles through all of the results
                 //sets variables needed to create Building objects
@@ -146,14 +137,12 @@ public class BuildingData extends Data {
 
     public void updateBuilding(Building building) {
         PreparedStatement prep = null;
-
         try {
             prep = conn.prepareStatement("UPDATE buildings SET name = ?, num_rooms = ? WHERE id = ?");
             prep.setString(1, building.getName());
             prep.setInt(2, building.getNumRooms());
             prep.setInt(3, building.getId());
             prep.executeUpdate();
-
             for (IDataChangeEvent<Building> listener : buildingChangedEvents) {
                 listener.onDataChanged(building);
             }

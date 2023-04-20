@@ -15,21 +15,10 @@ public class CourseInstanceData extends Data {
 
 
     public CourseInstance getCourseInstance(int ID) {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+        ResultSet resultSet = getById("course_instances", ID);
         CourseInstance course = null;
-
-        try {
-            preparedStatement = conn.prepareStatement("Select * from course_instances Where id =" + String.valueOf(ID));
-            resultSet = preparedStatement.executeQuery();
-        } catch (SQLException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-
         try {
             while (resultSet.next()) {
-
                 int id = resultSet.getInt("id");
                 int courseId = resultSet.getInt("type_id");
                 int profId = resultSet.getInt("professor_id");
@@ -41,7 +30,6 @@ public class CourseInstanceData extends Data {
 
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return course;
@@ -51,17 +39,7 @@ public class CourseInstanceData extends Data {
 
     public ArrayList<CourseInstance> getCourseInstances() {
         ArrayList<CourseInstance> courses = new ArrayList<CourseInstance>();
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-
-        try {
-            preparedStatement = conn.prepareStatement("Select * from course_instances");
-            resultSet = preparedStatement.executeQuery();
-        } catch (SQLException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-
+        ResultSet resultSet = getAll("course_instances");
         try {
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
@@ -84,18 +62,8 @@ public class CourseInstanceData extends Data {
 
 
     public CourseInstance getMostRecent() {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+        ResultSet resultSet = getRecent("course_instances");
         CourseInstance course = null;
-
-        try {
-            preparedStatement = conn.prepareStatement("Select * from course_instances Order by id DESC Limit 1");
-            resultSet = preparedStatement.executeQuery();
-        } catch (SQLException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-
         try {
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
@@ -111,14 +79,12 @@ public class CourseInstanceData extends Data {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        //System.out.println(student.getID());
         return course;
     }
 
 
     public void updateCourseInstance(CourseInstance course) {
         PreparedStatement prep = null;
-
         try {
             prep = conn.prepareStatement("UPDATE course_instances SET type_id = ?, professor_id = ?, room_id = ?, start_time = ?, end_time = ? WHERE id = ?");
             prep.setInt(1, course.getCurrentCourse());
@@ -128,7 +94,6 @@ public class CourseInstanceData extends Data {
             prep.setInt(5, course.getEndTime());
             prep.setInt(6, course.getID());
             prep.executeUpdate();
-
             for (IDataChangeEvent<CourseInstance> listener : courseInstanceChangedEvents) {
                 listener.onDataChanged(course);
             }
@@ -144,19 +109,14 @@ public class CourseInstanceData extends Data {
     public void insertCourseInstance(CourseInstance course) {
         PreparedStatement prep = null;
         ResultSet res = null;
-
         try {
             prep = conn.prepareStatement("insert into course_instances(type_id, professor_id, room_id, start_time, end_time) VALUES( ?,?,?,?,? )");
-
             prep.setInt(1, course.getCurrentCourse());
             prep.setInt(2, course.getProf());
             prep.setInt(3, course.getRoomId());
             prep.setInt(4, course.getStartTime());
             prep.setInt(5, course.getEndTime());
-
             prep.executeUpdate();
-
-
             CourseInstance course2 = getMostRecent();
             course.setID(course2.getID());
         } catch (SQLException e) {

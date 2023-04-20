@@ -14,18 +14,11 @@ public class RoomData extends Data {
     private static List<IDataChangeEvent<Room>> roomChangedEvents = new ArrayList<IDataChangeEvent<Room>>();
 
     public ArrayList<Room> getRooms() {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+
+        ResultSet resultSet = getAll("rooms");
         Room room = null;
         ArrayList<Room> result = new ArrayList<Room>();
 
-        try {
-            preparedStatement = conn.prepareStatement("select * from rooms");
-            resultSet = preparedStatement.executeQuery();
-        } catch (SQLException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
 
         try {
             while (resultSet.next()) {
@@ -105,17 +98,8 @@ public class RoomData extends Data {
     }
 
     public Room getRoom(int ID) {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+        ResultSet resultSet = getById("rooms", ID);
         Room room = null;
-
-        try {
-            preparedStatement = conn.prepareStatement("Select * from rooms Where id = " + String.valueOf(ID));
-            resultSet = preparedStatement.executeQuery();
-        } catch (SQLException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
 
         try {
             while (resultSet.next()) {

@@ -16,18 +16,10 @@ public class CourseData extends Data {
     private static List<IDataChangeEvent<Course>> courseChangedEvents = new ArrayList<IDataChangeEvent<Course>>();
 
     public ArrayList<Course> getCourses() {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+
+        ResultSet resultSet = getAll("course_types");
         Course course = null;
         ArrayList<Course> result = new ArrayList<Course>();
-
-        try {
-            preparedStatement = conn.prepareStatement("select * from course_types");
-            resultSet = preparedStatement.executeQuery();
-        } catch (SQLException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
 
         try {
             while (resultSet.next()) {
@@ -49,20 +41,17 @@ public class CourseData extends Data {
 
     public Course getCourse(int ID) {
 
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+
+        ResultSet resultSet = getById("course_types", ID);
         Course course = null;
 
         try {
-            preparedStatement = conn.prepareStatement("Select * from course_types Where id=" + String.valueOf(ID));
-            resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 int number = resultSet.getInt("number");
                 String name = resultSet.getString("name");
                 String description = resultSet.getString("description");
                 int department_id = resultSet.getInt("department_id");
-
                 course = new Course(name, number, description, department_id, id);
             }
         } catch (SQLException e) {

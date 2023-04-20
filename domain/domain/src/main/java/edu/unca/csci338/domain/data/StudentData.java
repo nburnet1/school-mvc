@@ -14,16 +14,8 @@ public class StudentData extends Data {
     private static List<IDataChangeEvent<Student>> studentChangedEvents = new ArrayList<IDataChangeEvent<Student>>();
 
     public Student getStudent(int ID) {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+        ResultSet resultSet = getById("students", ID);
         Student student = null;
-        try {
-            preparedStatement = conn.prepareStatement("Select * from students Where id = " + String.valueOf(ID));
-            resultSet = preparedStatement.executeQuery();
-        } catch (SQLException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
         try {
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
@@ -41,21 +33,12 @@ public class StudentData extends Data {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        //System.out.println(student.getID());
         return student;
     }
 
     public ArrayList<Student> getStudents() {
         ArrayList<Student> students = new ArrayList<Student>();
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
-        try {
-            preparedStatement = conn.prepareStatement("Select * from students");
-            resultSet = preparedStatement.executeQuery();
-        } catch (SQLException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
+        ResultSet resultSet = getAll("students");
         try {
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
@@ -103,21 +86,11 @@ public class StudentData extends Data {
     }
 
     public Student getMostRecent() {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+        ResultSet resultSet = getRecent("students");
         Student student = null;
         try {
-            preparedStatement = conn.prepareStatement("Select * from students Order by id DESC Limit 1");
-            resultSet = preparedStatement.executeQuery();
-        } catch (SQLException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-        try {
             while (resultSet.next()) {
-                //System.out.println("Here");
                 int id = resultSet.getInt("id");
-                //System.out.println(id);
                 String firstName = resultSet.getString("first_name");
                 String lastName = resultSet.getString("last_name");
                 int hoursCompleted = resultSet.getInt("hours_completed");
@@ -126,7 +99,6 @@ public class StudentData extends Data {
                 int yearLevel = resultSet.getInt("year");
                 String status = resultSet.getString("status");
                 student = new Student(id, firstName, lastName, hoursCompleted, hoursCurrent, hoursNeeded, yearLevel, status);
-
             }
         } catch (SQLException e) {
             // TODO Auto-generated catch block
@@ -159,8 +131,6 @@ public class StudentData extends Data {
         }
 
     }
-
-
 
 
     public static void AddOnStudentDataChangeEventListener(IDataChangeEvent<Student> listener) {

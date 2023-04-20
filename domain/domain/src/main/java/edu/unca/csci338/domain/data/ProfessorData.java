@@ -18,17 +18,9 @@ public class ProfessorData extends Data {
 
 
     public ArrayList<Professor> getProfessors() {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+        ResultSet resultSet = getAll("professors");
         Professor professor = null;
         ArrayList<Professor> result = new ArrayList<Professor>();
-        try {
-            preparedStatement = conn.prepareStatement("select * from professors");
-            resultSet = preparedStatement.executeQuery();
-        } catch (SQLException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
         try {
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
@@ -78,16 +70,8 @@ public class ProfessorData extends Data {
 
 
     public Professor getProfessorByID(int ID) {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+        ResultSet resultSet = getById("professors", ID);
         Professor professor = null;
-        try {
-            preparedStatement = conn.prepareStatement("select * from professors where id = " + String.valueOf(ID));
-            resultSet = preparedStatement.executeQuery();
-        } catch (SQLException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
         try {
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
@@ -112,7 +96,6 @@ public class ProfessorData extends Data {
         int department = professor.getDepartment();
         System.out.println(first);
         System.out.println(last);
-        //int ID = professor.getID();
         try {
             preparedStatement = conn.prepareStatement("insert into professors (first_name, last_name, department_id) values ('" + first + "', '" + last + "', " + department + ")");
             profID = preparedStatement.executeUpdate();
@@ -150,16 +133,8 @@ public class ProfessorData extends Data {
     }
 
     public Professor getMostRecent() {
-        PreparedStatement preparedStatement = null;
-        ResultSet resultSet = null;
+        ResultSet resultSet = getRecent("professors");
         Professor professor = null;
-        try {
-            preparedStatement = conn.prepareStatement("Select * from professors Order by id DESC Limit 1");
-            resultSet = preparedStatement.executeQuery();
-        } catch (SQLException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
         try {
             while (resultSet.next()) {
                 //System.out.println("Here");
@@ -177,7 +152,6 @@ public class ProfessorData extends Data {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        //System.out.println(student.getID());
         return professor;
 
     }

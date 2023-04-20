@@ -1,9 +1,6 @@
 package edu.unca.csci338.domain.data;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class Data {
     public Connection conn = null;
@@ -45,6 +42,46 @@ public class Data {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public ResultSet getAll(String table) {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            preparedStatement = conn.prepareStatement("Select * from "+table);
+            resultSet = preparedStatement.executeQuery();
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
+        return resultSet;
+    }
+
+    public ResultSet getById(String table, int ID) {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            preparedStatement = conn.prepareStatement("Select * from " +table+ " Where id = " + String.valueOf(ID));
+            resultSet = preparedStatement.executeQuery();
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
+        return resultSet;
+    }
+
+    public ResultSet getRecent(String table) {
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+
+        try {
+            preparedStatement = conn.prepareStatement("Select * from "+table+" Order by id DESC Limit 1");
+            resultSet = preparedStatement.executeQuery();
+        } catch (SQLException e1) {
+            e1.printStackTrace();
+        }
+        return resultSet;
+
     }
 
 
