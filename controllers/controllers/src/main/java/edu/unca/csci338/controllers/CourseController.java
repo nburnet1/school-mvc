@@ -38,7 +38,7 @@ public class CourseController {
     }
     @DeleteMapping("/course/{id}")
     public ResponseEntity<HttpStatus> deleteCourse(@PathVariable int id) {
-        cd.deleteCourse(id);
+        cd.delete(id,"course_type");
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

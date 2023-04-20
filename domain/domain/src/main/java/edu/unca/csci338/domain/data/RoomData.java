@@ -1,50 +1,19 @@
 package edu.unca.csci338.domain.data;
 
-import java.sql.ResultSet;
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.util.ArrayList;
-import java.util.List;
 import edu.unca.csci338.domain.model.IDataChangeEvent;
 import edu.unca.csci338.domain.model.Room;
 
-public class RoomData {
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
-    private Connection conn = null;
-    public boolean connected=false;
+public class RoomData extends Data {
 
-    private static List<IDataChangeEvent<Room>> roomChangedEvents=new ArrayList<IDataChangeEvent<Room>>();
+    private static List<IDataChangeEvent<Room>> roomChangedEvents = new ArrayList<IDataChangeEvent<Room>>();
 
-    public void Connect(String dbToConnectTo, String username, String pass) {
-        // auto close connection
-        try
-        {
-            conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/" + dbToConnectTo, username, pass); //
-
-            if (conn != null) {
-                System.out.println("Connected to the database!");
-                connected = true;
-            } else {
-                System.out.println("Failed to make connection!");
-            }
-        } catch (SQLException e) {
-            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void Disconnect() {
-        try {
-            conn.close();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-    public ArrayList<Room> getRooms(){
+    public ArrayList<Room> getRooms() {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         Room room = null;
@@ -75,7 +44,8 @@ public class RoomData {
         }
         return result;
     }
-    public Room getRoomsByBuildingID(int buildingID){
+
+    public Room getRoomsByBuildingID(int buildingID) {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         Room room = null;
@@ -104,7 +74,7 @@ public class RoomData {
         return room;
     }
 
-    public Room getRoomsByBuildingIDAndNumber(int buildingID, int roomNumber){
+    public Room getRoomsByBuildingIDAndNumber(int buildingID, int roomNumber) {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         Room room = null;
@@ -226,15 +196,15 @@ public class RoomData {
     }
 
     public void updateRoom(Room room) {
-        PreparedStatement prep=null;
+        PreparedStatement prep = null;
 
         try {
             prep = conn.prepareStatement("UPDATE rooms SET building_id = ?, room_number = ?, capacity = ?, room_type = ? WHERE id = ?");
             prep.setInt(1, room.getBuildingId());
             prep.setInt(2, room.getRoomNum());
             prep.setInt(3, room.getCapacity());
-            prep.setString(4,  room.getRoomType());
-            prep.setInt(5,  room.getId());
+            prep.setString(4, room.getRoomType());
+            prep.setInt(5, room.getId());
             prep.executeUpdate();
 
             for (IDataChangeEvent<Room> listener : roomChangedEvents) {
@@ -246,17 +216,5 @@ public class RoomData {
             e.printStackTrace();
         }
 
-    }
-
-    public void deleteRoom(int ID) {
-        PreparedStatement preparedStatement = null;
-
-        try {
-            preparedStatement = conn.prepareStatement("DELETE FROM rooms WHERE id = ?" );
-            preparedStatement.setInt(1, ID);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }

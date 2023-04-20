@@ -41,7 +41,7 @@ public class BuildingController {
     }
     @DeleteMapping("/building/{id}")
     public ResponseEntity<HttpStatus> deleteBuilding(@PathVariable int id) {
-        bd.deleteBuilding(id);
+        bd.delete(id,"buildings");
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }

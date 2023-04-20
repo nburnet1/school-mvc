@@ -55,7 +55,7 @@ public class StudentController {
 	public ResponseEntity<HttpStatus> deleteStudent(
 			@PathVariable int id
 	) {
-		sd.deleteStudent(id);
+		sd.delete(id, "students");
 		return ResponseEntity.ok(HttpStatus.OK);
 	}
 }

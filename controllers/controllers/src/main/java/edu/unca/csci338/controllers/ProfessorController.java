@@ -55,7 +55,7 @@ public class ProfessorController {
 	public ResponseEntity<HttpStatus> deleteProfessor(
 			@PathVariable int id
 	) {
-		pd.deleteProfessor(id);
+		pd.delete(id, "professors");
 		return ResponseEntity.ok(HttpStatus.OK);
 	}
 }

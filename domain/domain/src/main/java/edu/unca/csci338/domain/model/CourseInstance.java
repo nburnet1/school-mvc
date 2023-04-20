@@ -5,53 +5,96 @@ import java.util.Date;
 
 public class CourseInstance {
 
-    private int id;
-    private int typeId;
-    private int professorId;
-    private int roomId;
+    int id;
+    int startTime;
+    int endTime;
+    //	ArrayList<Student> students = new ArrayList<Student>();
+    int currentCourse;
+    int prof;
+    int roomId;
 
 
-    public CourseInstance(int id, int typeId, int professorId, int roomId) {
-        this.id = id;
-        this.typeId = typeId;
-        this.professorId = professorId;
-        this.roomId = roomId;
+    public int getCurrentCourse() {
+        return currentCourse;
     }
 
-    public CourseInstance(){
 
+    public void setCurrentCourse(int currentCourse) {
+        this.currentCourse = currentCourse;
     }
 
-    public int getId() {
+
+    public int getProf() {
+        return prof;
+    }
+
+
+    public void setProf(int prof) {
+        this.prof = prof;
+    }
+
+    public int getID()
+    {
         return id;
     }
 
-    public int getProfessorId() {
-        return professorId;
+    public void setID(int id) {
+        this.id = id;
     }
+
+    public CourseInstance() {
+
+    }
+
+    public CourseInstance(int id, int currentCourse, int prof, int roomId, int startTime, int endTime) {
+        this.id=id;
+        this.currentCourse = currentCourse;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.roomId=roomId;
+        this.prof=prof;
+
+    }
+
+
+
+    public int getStartTime() {
+        return this.startTime;
+    }
+
+
+    public void setStartTime(int startTime) {
+        this.startTime = startTime;
+    }
+
+    public int getEndTime() {
+        return this.endTime;
+    }
+
+
+    public void setEndTime(int endTime) {
+        this.endTime = endTime;
+    }
+
+
+
 
     public int getRoomId() {
         return roomId;
     }
 
-    public int getTypeId() {
-        return typeId;
-    }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public void setProfessorId(int professorId) {
-        this.professorId = professorId;
-    }
     public void setRoomId(int roomId) {
         this.roomId = roomId;
     }
-    public void setTypeId(int typeId) {
-        this.typeId = typeId;
-    }
+
+//	public ArrayList<Student> getStudents() {
+//		return students;
+//	}
+//
+//
+//	public void setStudents(ArrayList<Student> students) {
+//		this.students = students;
+//	}
+
 }
-
-
-

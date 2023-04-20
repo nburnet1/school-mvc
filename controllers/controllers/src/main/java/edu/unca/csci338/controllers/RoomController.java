@@ -50,7 +50,7 @@ public class RoomController {
         if (existingRoom == null) {
             return ResponseEntity.notFound().build();
         }
-        rd.deleteRoom(id);
+        rd.delete(id, "rooms");
         return ResponseEntity.ok(HttpStatus.OK);
     }
 

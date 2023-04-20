@@ -1,58 +1,21 @@
 package edu.unca.csci338.domain.data;
 
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import edu.unca.csci338.domain.model.Course;
+import edu.unca.csci338.domain.model.IDataChangeEvent;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.unca.csci338.domain.model.Course;
+public class CourseData extends Data {
 
-import edu.unca.csci338.domain.model.IDataChangeEvent;
-
-import edu.unca.csci338.domain.model.Room;
-
-public class CourseData {
-
-    private Connection conn = null;
-    public boolean connected=false;
 
     private static List<IDataChangeEvent<Course>> courseChangedEvents = new ArrayList<IDataChangeEvent<Course>>();
 
-    public void Connect(String dbToConnectTo, String username, String pass) {
-        // auto close connection
-        try
-        {
-            conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/" + dbToConnectTo, username, pass); //
-
-            if (conn != null) {
-                System.out.println("Connected to the database!");
-                connected = true;
-            } else {
-                System.out.println("Failed to make connection!");
-            }
-        } catch (SQLException e) {
-            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-
-        }
-    }
-
-    public void Disconnect() {
-        try {
-            conn.close();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
-
-    public ArrayList<Course> getCourses(){
+    public ArrayList<Course> getCourses() {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
         Course course = null;
@@ -100,7 +63,7 @@ public class CourseData {
                 String description = resultSet.getString("description");
                 int department_id = resultSet.getInt("department_id");
 
-                course = new Course(name, number, description,department_id,id);
+                course = new Course(name, number, description, department_id, id);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -118,7 +81,7 @@ public class CourseData {
             prep.setString(2, course.getNameOfCourse());
             prep.setString(3, course.getDescription());
             prep.setInt(4, course.getDepartment());
-            prep.setInt(5,  course.getId());
+            prep.setInt(5, course.getId());
             prep.executeUpdate();
 
             for (IDataChangeEvent<Course> listener : courseChangedEvents) {
@@ -149,15 +112,6 @@ public class CourseData {
         }
     }
 
-    public void deleteCourse(int ID) {
-        PreparedStatement prep = null;
-        try {
-            prep = conn.prepareStatement("DELETE from course_types WHERE id = ?");
-            prep.setInt(1, ID);
-            prep.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+
 
 }

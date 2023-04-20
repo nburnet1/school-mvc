@@ -2,10 +2,7 @@ package edu.unca.csci338.domain.data;
 
 import edu.unca.csci338.domain.model.Building;
 import edu.unca.csci338.domain.model.IDataChangeEvent;
-import edu.unca.csci338.domain.model.Student;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class BuildingData {
+public class BuildingData extends Data {
 
     /**
      * Method for establishing a connection to the database
@@ -21,34 +18,7 @@ public class BuildingData {
      * @param dbToConnectTo (String)
      */
 
-    private Connection conn = null;
-
     private static List<IDataChangeEvent<Building>> buildingChangedEvents = new ArrayList<IDataChangeEvent<Building>>();
-
-
-    public void Connect(String dbToConnectTo, String username, String pass) {
-        // auto close connection
-        try {
-            //Still need to put the actual connection port in
-            conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/" + dbToConnectTo, username, pass); //
-            //print statements to tell whether connection was successful
-            if (conn != null) {
-                System.out.println("Connected to the database!");
-
-            } else {
-                System.out.println("Failed to make connection!");
-
-            }
-
-        } catch (SQLException e) {
-            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }  //end try/catch
-
-    }// connect()
 
 
     /**
@@ -163,10 +133,6 @@ public class BuildingData {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
-//            preparedStatement = conn.prepareStatement("insert into buildings ('num_Rooms', 'name') values(" + numRooms + "," + name + ")");
-
-
     }//end addBuilding()
 
 
@@ -179,7 +145,7 @@ public class BuildingData {
      */
 
     public void updateBuilding(Building building) {
-        PreparedStatement prep=null;
+        PreparedStatement prep = null;
 
         try {
             prep = conn.prepareStatement("UPDATE buildings SET name = ?, num_rooms = ? WHERE id = ?");
@@ -199,27 +165,6 @@ public class BuildingData {
         }
 
     }
-
-    /**
-     * deletes the id and all other data associated with that id from the building database table
-     *
-     * @param ID (int)
-     */
-
-    public void deleteBuilding(int ID) {
-        //deleteBuilding() variables
-        PreparedStatement preparedStatement = null;
-        //sending out a request for the database and executing that request
-        try {
-            preparedStatement = conn.prepareStatement("delete from buildings where id = " + ID);
-            preparedStatement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-        }//end try/catch
-
-    }//end deleteBuilding()
 
 }
 

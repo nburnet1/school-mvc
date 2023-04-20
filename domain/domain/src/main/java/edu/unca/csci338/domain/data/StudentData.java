@@ -1,39 +1,17 @@
 package edu.unca.csci338.domain.data;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
+import edu.unca.csci338.domain.model.IDataChangeEvent;
+import edu.unca.csci338.domain.model.Student;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import edu.unca.csci338.domain.model.IDataChangeEvent;
-import edu.unca.csci338.domain.model.Student;
-
-public class StudentData {
-    private Connection conn = null;
-    public boolean connected = false;
+public class StudentData extends Data {
 
     private static List<IDataChangeEvent<Student>> studentChangedEvents = new ArrayList<IDataChangeEvent<Student>>();
-
-    public void Connect(String dbToConnectTo, String username, String pass) {
-        // auto close connection
-        try {
-            conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/" + dbToConnectTo, username, pass); //
-            if (conn != null) {
-                System.out.println("Connected to the database!");
-                connected = true;
-            } else {
-                System.out.println("Failed to make connection!");
-            }
-        } catch (SQLException e) {
-            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-        }
-    }
 
     public Student getStudent(int ID) {
         PreparedStatement preparedStatement = null;
@@ -182,33 +160,10 @@ public class StudentData {
 
     }
 
-    public void deleteStudent(int ID) {
-        PreparedStatement preparedStatement = null;
-        try {
-            preparedStatement = conn.prepareStatement("DELETE FROM students WHERE id = ?");
-            preparedStatement.setInt(1, ID);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public void Disconnect() {
-        try {
-            conn.close();
-            connected = false;
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-    }
 
-    public boolean getConnectStatus() {
-        return connected;
-    }
 
     public static void AddOnStudentDataChangeEventListener(IDataChangeEvent<Student> listener) {
         studentChangedEvents.add(listener);
     }
-    //public int
 }

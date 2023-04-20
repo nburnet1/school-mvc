@@ -12,31 +12,9 @@ import edu.unca.csci338.domain.model.IDataChangeEvent;
 import edu.unca.csci338.domain.model.Professor;
 
 
-public class ProfessorData {
-
-    private Connection conn = null;
-
-    public boolean connected = false;
+public class ProfessorData extends Data {
 
     private static List<IDataChangeEvent<Professor>> professorChangedEvents = new ArrayList<IDataChangeEvent<Professor>>();
-
-    public void Connect(String dbToConnectTo, String username, String pass) {
-        // auto close connection
-        try {
-            conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/" + dbToConnectTo, username, pass); //
-            if (conn != null) {
-                System.out.println("Connected to the database!");
-                connected = true;
-            } else {
-                System.out.println("Failed to make connection!");
-            }
-        } catch (SQLException e) {
-            System.err.format("SQL State: %s\n%s", e.getSQLState(), e.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-        }
-    }
 
 
     public ArrayList<Professor> getProfessors() {
@@ -171,18 +149,6 @@ public class ProfessorData {
 
     }
 
-    public void deleteProfessor(int ID) {
-        PreparedStatement preparedStatement = null;
-        try {
-            preparedStatement = conn.prepareStatement("delete from professors where id = " + ID);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }
-
-    }
-
     public Professor getMostRecent() {
         PreparedStatement preparedStatement = null;
         ResultSet resultSet = null;
@@ -214,15 +180,6 @@ public class ProfessorData {
         //System.out.println(student.getID());
         return professor;
 
-    }
-
-    public void Disconnect() {
-        try {
-            conn.close();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
     }
 
 }

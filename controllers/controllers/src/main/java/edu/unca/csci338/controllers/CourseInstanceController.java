@@ -1,49 +1,65 @@
 package edu.unca.csci338.controllers;
 
-import edu.unca.csci338.domain.data.CourseInstanceData;
+import java.util.ArrayList;
 import edu.unca.csci338.domain.model.CourseInstance;
-import org.springframework.web.bind.annotation.*;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
+import edu.unca.csci338.domain.data.CourseInstanceData;
 
 @RestController
 public class CourseInstanceController {
-    private CourseInstanceData cid = new CourseInstanceData();
+
+    private CourseInstanceData cd = new CourseInstanceData();
 
     public CourseInstanceController(){
-        cid.Connect("edu_unca_csci338", "root", "password123");
+        cd.Connect("edu_unca_csci338","root","password123");
     }
 
-    @GetMapping("/courseInstances/")
+    @GetMapping("/courseinstances/")
     public ResponseEntity<ArrayList<CourseInstance>> CourseInstances() {
-        return ResponseEntity.ok(cid.getCourseInstances());
+        //TODO Reference CSCS 338 project and Student object
+        return ResponseEntity.ok(cd.getCourseInstances());
     }
 
-    @GetMapping("/courseInstance/{id}")
-    public ResponseEntity<CourseInstance> CourseInstance(@PathVariable int id) {
-        return ResponseEntity.ok(cid.getCourseInstance(id));
+    @GetMapping("/courseinstance/{id}")
+    public ResponseEntity<CourseInstance> CourseInstanceId(@PathVariable int id) {
+
+        return ResponseEntity.ok(cd.getCourseInstance(id));
     }
 
-    @PostMapping("/courseInstance/")
-    public ResponseEntity<CourseInstance> updateCourseInstance(@RequestBody CourseInstance courseInstance) {
-        cid.updateCourseInstance(courseInstance);
-        return ResponseEntity.ok(courseInstance);
+    @GetMapping("/courseinstance/")
+    public ResponseEntity<CourseInstance> CourseInstance() {
+        return ResponseEntity.ok(cd.getMostRecent());
     }
 
-    @PutMapping("/courseInstance/")
-    public ResponseEntity<CourseInstance> addCourseInstance(@RequestBody CourseInstance courseInstance) {
-        cid.createCourseInstance(courseInstance);
-        return ResponseEntity.ok(courseInstance);
-    }
-
-    @DeleteMapping("/courseInstance/{id}")
-    public ResponseEntity<HttpStatus> deleteCourseInstance(@PathVariable int id) {
-        cid.deleteCourseInstance(id);
+    @PostMapping("/courseinstance/")
+    public ResponseEntity CourseInstancePost(@RequestBody(required = true) CourseInstance CourseInstance) {
+        cd.updateCourseInstance(CourseInstance);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
+    @PutMapping("/courseinstance/")
+    public ResponseEntity putCourseInstance(@RequestBody(required = true) CourseInstance CourseInstance) {
+        cd.insertCourseInstance(CourseInstance);
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 
-
+    @DeleteMapping("/courseinstance/{id}")
+    public ResponseEntity deleteCourseInstance(@PathVariable int id) {
+        CourseInstance exists = cd.getCourseInstance(id);
+        if(exists==null) {
+            return ResponseEntity.notFound().build();
+        }
+        cd.delete(id,"course_instances");
+        return ResponseEntity.ok(HttpStatus.OK);
+    }
 }
